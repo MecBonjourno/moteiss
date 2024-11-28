@@ -1,12 +1,21 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Dancing_Script } from 'next/font/google';
 import "./globals.css";
+import { ThemeProvider } from '@/components/themeProvider';
+
+const dancingScript = Dancing_Script({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-dancing-script',
+});
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
   weight: "100 900",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
@@ -26,9 +35,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${dancingScript.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

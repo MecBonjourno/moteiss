@@ -1,101 +1,205 @@
-import Image from "next/image";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+// "use client"
+
+// import { motion } from 'framer-motion';
+
+// export default function Home() {
+//   return (
+//     <div className="flex items-center justify-center min-h-screen bg-darkBg">
+//       <motion.h1
+//         className="font-cursive text-6xl font-bold text-neonRed"
+//         initial={{ textShadow: '0 0 10px #ff4d4d' }}
+//         animate={{
+//           textShadow: [
+//             '0 0 10px #ff4d4d',
+//             '0 0 20px #ff4d4d',
+//             '0 0 30px #ff4d4d',
+//             '0 0 40px #ff4d4d',
+//             '0 0 30px #ff4d4d',
+//             '0 0 20px #ff4d4d',
+//             '0 0 10px #ff4d4d',
+//           ],
+//         }}
+//         transition={{
+//           duration: 2,
+//           repeat: Infinity,
+//           repeatType: 'reverse',
+//         }}
+//       >
+//         Moteiss
+//       </motion.h1>
+//     </div>
+//   );
+// }
+
+"use client"
+
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
+import { Heart, Sparkles } from 'lucide-react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+
+  return (
+    <main 
+      ref={containerRef} 
+      className="min-h-screen bg-gradient-to-b from-darkBg to-dark-light relative overflow-hidden"
+    >
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute"
+            initial={{
+              opacity: 0,
+              scale: 0,
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+            }}
+            animate={{
+              opacity: [0.2, 0.5, 0.2],
+              scale: [1, 1.5, 1],
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+            }}
+            transition={{
+              duration: Math.random() * 10 + 10,
+              repeat: Infinity,
+              repeatType: "reverse",
+              delay: Math.random() * 5,
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+            {i % 2 === 0 ? (
+              <Heart className="text-primary-light/20 w-4 h-4" />
+            ) : (
+              <Sparkles className="text-secondary-light/20 w-3 h-3" />
+            )}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
+        <motion.div
+          className="text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <motion.div
+            className="relative inline-block"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 300, damping: 10 }}
+          >
+            <motion.h1
+              className="font-cursive text-7xl sm:text-8xl font-bold text-neonRed relative z-10"
+              initial={{ textShadow: '0 0 10px #ff4d4d' }}
+              animate={{
+                textShadow: [
+                  '0 0 10px #ff4d4d',
+                  '0 0 20px #ff4d4d',
+                  '0 0 30px #ff4d4d',
+                  '0 0 40px #ff4d4d',
+                  '0 0 30px #ff4d4d',
+                  '0 0 20px #ff4d4d',
+                  '0 0 10px #ff4d4d',
+                ],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            >
+              Moteiss
+            </motion.h1>
+            
+            {/* Decorative elements */}
+            <motion.div
+              className="absolute -inset-4 bg-gradient-to-r from-primary-light/20 to-secondary-light/20 rounded-full blur-xl"
+              animate={{
+                scale: [1, 1.1, 1],
+                opacity: [0.3, 0.5, 0.3],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </motion.div>
+
+          <motion.p
+            className="mt-6 text-xl text-neutral-light/80 max-w-md mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
           >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            Ignite your passion and embrace desire
+          </motion.p>
+
+          <motion.div
+            className="mt-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            <motion.button
+              className="px-8 py-3 bg-gradient-to-r from-primary to-primary-light rounded-full text-white font-semibold shadow-red-glow transition-shadow duration-300"
+              whileHover={{ 
+                scale: 1.05,
+                boxShadow: '0 0 20px 2px rgba(255, 77, 77, 0.7)'
+              }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Discover More
+            </motion.button>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          animate={{
+            y: [0, 10, 0],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            repeatType: 'reverse',
+          }}
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <motion.div
+            className="w-6 h-10 border-2 border-neutral-light/30 rounded-full relative"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1 }}
+          >
+            <motion.div
+              className="w-1.5 h-1.5 bg-neutral-light/50 rounded-full absolute left-1/2 top-2 -translate-x-1/2"
+              animate={{
+                y: [0, 16, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            />
+          </motion.div>
+        </motion.div>
+      </div>
+    </main>
   );
 }
